@@ -330,6 +330,7 @@ build() {
         *) bail "unrecognized build tool '${build_tool}'" ;;
     esac
 }
+
 do_codesign() {
     if [[ -n "${INPUT_CODESIGN:-}" ]]; then
         local codesign_options=(--sign "${INPUT_CODESIGN}")
@@ -373,6 +374,32 @@ case "${INPUT_TARGET:-}" in
         target_dir="${target_dir}/${target}/${profile_directory}"
         ;;
 esac
+
+# Compress binaries with UPX
+if [[ "${INPUT_UPX:-}" = "true" ]]; then
+    compress_binaries() {
+        for bin_exe in "${bins[@]}"; do
+            x upx --best --lzma "${target_dir}/${bin_exe}"
+        done
+    }
+
+    case "${host_os}" in
+        windows)
+            choco install upx -y
+            compress_binaries
+            ;;
+        linux)
+            sudo apt-get install -y upx-ucl
+            compress_binaries
+            ;;
+        macos)
+            # MacOS is not currently supported by UPX
+            ;;
+        *)
+            warn "UPX is not available on ${host_os}"
+            ;;
+    esac
+fi
 
 case "${host_os}" in
     macos)
