@@ -99,7 +99,7 @@ jobs:
           codesign: '-'
           codesign-prefix: 'com.example.'
           codesign-options: 'runtime'
-          upx: ${{ startsWith(matrix.os, 'ubuntu-') }}
+          upx: false
       - name: Check action outputs
         run: |
           printf 'outputs.archive should not be empty\n'
