@@ -99,7 +99,7 @@ jobs:
           codesign: '-'
           codesign-prefix: 'com.example.'
           codesign-options: 'runtime'
-          upx: true
+          upx: ${{ startsWith(matrix.os, 'ubuntu-') }}
       - name: Check action outputs
         run: |
           printf 'outputs.archive should not be empty\n'
@@ -123,7 +123,7 @@ jobs:
           printf 'outputs.md5 should be a file\n'
           test -f "${{ steps.upload-rust-binary-action.outputs.md5 }}"
       - name: Check UPX
-        if: ${{ startsWith(matrix.os, 'ubuntu-') }}
+        if: startsWith(matrix.os, 'ubuntu-')
         run: |
           printf 'UPX should be installed\n'
           test -n "$(command -v upx)"
