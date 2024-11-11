@@ -379,7 +379,7 @@ esac
 if [[ "${INPUT_UPX:-}" = "true" ]]; then
     compress_binaries() {
         for bin_exe in "${bins[@]}"; do
-            x upx --best --lzma "${target_dir}/${bin_exe}"
+            x upx "${target_dir}/${bin_exe}"
         done
     }
 

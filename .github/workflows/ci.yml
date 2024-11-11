@@ -138,14 +138,8 @@ jobs:
 
           printf 'binary should be compressed with UPX\n'
           target_dir="./test-crate/target/release"
-          set -x
-          mkdir foo
-          tar -C "foo" -xf "${{ steps.upload-rust-binary-action.outputs.tar }}"
-          ls -a "foo/test-crate"
-
-          upx "foo/test-crate" &> /tmp/file || true
-          echo "OUTPUT: $(cat /tmp/file)"
-          test -n "$(grep 'AlreadyPackedException' /tmp/file)"
+          tar -C "$target_dir" -xf "${{ steps.upload-rust-binary-action.outputs.tar }}"
+          test -n "$(file "$target_dir/test-crate" | grep 'no section header')"
       - name: Check b2 output
         if: ${{ contains(matrix.checksums || 'b2,sha256,sha512,sha1,md5', 'b2') }}
         run: |
