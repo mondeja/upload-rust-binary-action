@@ -123,7 +123,7 @@ jobs:
           printf 'outputs.md5 should be a file\n'
           test -f "${{ steps.upload-rust-binary-action.outputs.md5 }}"
       - name: Check UPX
-        if: ! startsWith(matrix.os, 'macos-')
+        if: ${{ !startsWith(matrix.os, 'macos-') }}
         run: |
           printf 'UPX should be installed\n'
           test -n "$(command -v upx)"
