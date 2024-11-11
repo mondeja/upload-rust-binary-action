@@ -129,7 +129,7 @@ jobs:
           test -n "$(command -v upx)"
 
           printf 'binary should be compressed with UPX\n'
-          target_dir=".test-crate/target/${{ matrix.target || 'release' }}"
+          target_dir="./test-crate/target/${{ matrix.target || 'release' }}"
           already_packed=$(upx "$target_dir/test-crate" | grep AlreadyPackedException)
           test -n "$already_packed"
       - name: Check b2 output
