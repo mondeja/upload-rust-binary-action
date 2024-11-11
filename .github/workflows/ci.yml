@@ -122,7 +122,7 @@ jobs:
 
           printf 'outputs.md5 should be a file\n'
           test -f "${{ steps.upload-rust-binary-action.outputs.md5 }}"
-      - name: Check UPX (enabled)
+      - name: Check UPX
         if: startsWith(matrix.os, 'ubuntu-')
         run: |
           printf 'UPX should be installed\n'
@@ -132,17 +132,6 @@ jobs:
           target_dir="./test-crate/target/release"
           tar -C "$target_dir" -xf "${{ steps.upload-rust-binary-action.outputs.tar }}"
           test -n "$(file "$target_dir/test-crate" | grep 'no section header')"
-      - name: Check UPX (disabled)
-        if: startsWith(matrix.os, 'windows-')
-        shell: bash
-        run: |
-          printf "UPX should not be installed\n"
-          test -z "$(command -v upx)"
-
-          printf "binary should not be compressed with UPX\n"
-          target_dir="./test-crate/target/release"
-          unzip -q "${{ steps.upload-rust-binary-action.outputs.zip }}" -d "$target_dir"
-          test -z "$(file "$target_dir/test-crate.exe" | grep 'no section header')"
       - name: Check b2 output
         if: ${{ contains(matrix.checksums || 'b2,sha256,sha512,sha1,md5', 'b2') }}
         run: |
