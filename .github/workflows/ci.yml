@@ -140,6 +140,7 @@ jobs:
           target_dir="./test-crate/target/release"
           set -x
           tar -C "$target_dir" -xf "${{ steps.upload-rust-binary-action.outputs.tar }}"
+          ls -a "$target_dir"
 
           upx "$target_dir/test-crate" &> /tmp/file || true
           echo "OUTPUT: $(cat /tmp/file)"
