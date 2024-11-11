@@ -139,10 +139,10 @@ jobs:
           printf 'binary should be compressed with UPX\n'
           target_dir="./test-crate/target/release"
           set -x
-          tar -C "$target_dir" -xf "${{ steps.upload-rust-binary-action.outputs.tar }}"
-          ls -a "$target_dir"
+          tar -C "foo" -xf "${{ steps.upload-rust-binary-action.outputs.tar }}"
+          ls -a "foo"
 
-          upx "$target_dir/test-crate" &> /tmp/file || true
+          upx "$foo/test-crate" &> /tmp/file
           echo "OUTPUT: $(cat /tmp/file)"
           test -n "$(grep 'AlreadyPackedException' /tmp/file)"
       - name: Check b2 output
