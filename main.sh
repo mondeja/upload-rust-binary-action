@@ -389,7 +389,9 @@ if [[ "${INPUT_UPX:-}" = "true" ]]; then
             compress_binaries
             ;;
         linux)
-            sudo apt-get install -y upx-ucl
+            if ! type -P upx >/dev/null; then
+                sudo apt-get install -y upx-ucl
+            fi
             compress_binaries
             ;;
         macos)
