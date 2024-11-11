@@ -3,4 +3,3 @@ lipo
 mktemp
 zigbuild
 codesign
-lzma
