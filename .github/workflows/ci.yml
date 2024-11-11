@@ -99,7 +99,7 @@ jobs:
           codesign: '-'
           codesign-prefix: 'com.example.'
           codesign-options: 'runtime'
-          upx: false
+          upx: ${{ startsWith(matrix.os, 'ubuntu-') }}
       - name: Check action outputs
         run: |
           printf 'outputs.archive should not be empty\n'
@@ -125,9 +125,6 @@ jobs:
       - name: Check UPX
         if: startsWith(matrix.os, 'ubuntu-')
         run: |
-          printf 'UPX should be installed\n'
-          test -n "$(command -v upx)"
-
           printf 'binary should be compressed with UPX\n'
           target_dir="./test-crate/target/release"
           tar -C "$target_dir" -xf "${{ steps.upload-rust-binary-action.outputs.tar }}"
