@@ -141,7 +141,7 @@ jobs:
           set -x
           mkdir foo
           tar -C "foo" -xf "${{ steps.upload-rust-binary-action.outputs.tar }}"
-          ls -a "foo"
+          ls -a "foo/test-crate"
 
           upx "foo/test-crate" &> /tmp/file || true
           echo "OUTPUT: $(cat /tmp/file)"
