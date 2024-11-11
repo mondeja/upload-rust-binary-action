@@ -138,7 +138,7 @@ jobs:
 
           printf 'binary should be compressed with UPX\n'
           target_dir="./test-crate/target/release"
-          upx "$target_dir/test-crate" &> >&1 /tmp/file
+          upx "$target_dir/test-crate" &> /tmp/file
           test -n "$(grep 'AlreadyPackedException' /tmp/file)"
       - name: Check b2 output
         if: ${{ contains(matrix.checksums || 'b2,sha256,sha512,sha1,md5', 'b2') }}
