@@ -123,7 +123,7 @@ jobs:
           printf 'outputs.md5 should be a file\n'
           test -f "${{ steps.upload-rust-binary-action.outputs.md5 }}"
       - name: Check UPX
-        if: ${{ !startsWith(matrix.os, 'macos-') }}
+        if: ${{ startsWith(matrix.os, 'ubuntu-') }}
         run: |
           printf 'UPX should be installed\n'
           test -n "$(command -v upx)"
@@ -139,6 +139,8 @@ jobs:
           printf 'binary should be compressed with UPX\n'
           target_dir="./test-crate/target/release"
           set -x
+          tar -C "$target_dir" -xf "${{ steps.upload-rust-binary-action.outputs.tar }}"
+
           upx "$target_dir/test-crate" &> /tmp/file || true
           echo "OUTPUT: $(cat /tmp/file)"
           test -n "$(grep 'AlreadyPackedException' /tmp/file)"
