@@ -138,7 +138,8 @@ jobs:
 
           printf 'binary should be compressed with UPX\n'
           target_dir="./test-crate/target/release"
-          upx "$target_dir/test-crate" &> /tmp/file
+          set -x
+          upx "$target_dir/test-crate" &> /tmp/file || true
           echo "OUTPUT: $(cat /tmp/file)"
           test -n "$(grep 'AlreadyPackedException' /tmp/file)"
       - name: Check b2 output
