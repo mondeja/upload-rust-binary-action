@@ -127,11 +127,19 @@ jobs:
         run: |
           printf 'UPX should be installed\n'
           test -n "$(command -v upx)"
+          echo "ROOT"
+          ls -a .
+          echo "crate"
+          ls -a ./test-crate
+          echo "crate TARGET"
+          ls -a ./test-crate/target
+          echo "crate TARGET RELEASE"
+          ls -a ./test-crate/target/release
 
           printf 'binary should be compressed with UPX\n'
-          target_dir="./test-crate/target/${{ matrix.target || 'release' }}"
-          already_packed=$(upx "$target_dir/test-crate" | grep AlreadyPackedException)
-          test -n "$already_packed"
+          target_dir="./test-crate/target/release"
+          upx "$target_dir/test-crate" &> >&1 /tmp/file
+          test -n "$(grep 'AlreadyPackedException' /tmp/file)"
       - name: Check b2 output
         if: ${{ contains(matrix.checksums || 'b2,sha256,sha512,sha1,md5', 'b2') }}
         run: |
