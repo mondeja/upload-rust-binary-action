@@ -93,6 +93,7 @@ jobs:
           codesign: '-'
           codesign-prefix: 'com.example.'
           codesign-options: 'runtime'
+          upx: true
       - name: Check action outputs
         run: |
           printf 'outputs.archive should not be empty\n'
@@ -115,3 +116,13 @@ jobs:
 
           printf 'outputs.md5 should be a file\n'
           test -f "${{ steps.upload-rust-binary-action.outputs.md5 }}"
+      - name: Check UPX
+        if: ! startsWith(matrix.os, 'macos-')
+        run: |
+          printf 'UPX should be installed\n'
+          test -n "$(command -v upx)"
+
+          printf 'binary should be compressed with UPX\n'
+          target_dir=$(dirname "${{ steps.upload-rust-binary-action.outputs.tar }}")
+          already_packed=$(upx "$target_dir/test-crate" | grep AlreadyPackedException)
+          test -n "$already_packed"
